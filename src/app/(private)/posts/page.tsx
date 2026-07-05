@@ -1,14 +1,14 @@
 import Link from 'next/link';
-import { TimelineFeed } from '@/features/posts/TimelineFeed';
+import { ExplorePosts } from '@/features/posts/ExplorePosts';
 
-export default function TimelinePage() {
+export default function PostsPage() {
   return (
     <main className='mx-auto max-w-5xl space-y-6 px-4 py-8'>
       <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
         <div>
-          <h1 className='text-3xl font-bold'>Timeline</h1>
+          <h1 className='text-3xl font-bold'>Explore Posts</h1>
           <p className='text-sm text-zinc-400'>
-            Post dari akun kamu dan user yang kamu follow.
+            Semua post dari API explore.
           </p>
         </div>
 
@@ -20,7 +20,7 @@ export default function TimelinePage() {
         </Link>
       </div>
 
-      <TimelineFeed />
+      <ExplorePosts />
     </main>
   );
 }

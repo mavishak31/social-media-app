@@ -13,6 +13,7 @@ export function LogoutButton() {
 
   function handleLogout() {
     localStorage.removeItem('sociality_token');
+    localStorage.removeItem('sociality_user');
     dispatch(clearSession());
     router.replace('/login');
   }

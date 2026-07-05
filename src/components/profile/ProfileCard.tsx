@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { DEFAULT_AVATAR } from '@/lib/images';
 import type { MyProfile } from '@/types/profile';
 
 const stats = ['posts', 'followers', 'following', 'likes', 'saved'] as const;
@@ -8,7 +9,7 @@ export function ProfileCard({ profile }: { profile: MyProfile }) {
     <section className='rounded-lg border border-white/10 bg-zinc-950 p-5'>
       <div className='flex flex-col gap-4 sm:flex-row sm:items-center'>
         <Image
-          src={profile.avatarUrl || '/images/logo.png'}
+          src={profile.avatarUrl || DEFAULT_AVATAR}
           alt={profile.name}
           width={72}
           height={72}

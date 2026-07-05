@@ -9,7 +9,24 @@ export async function getMyProfile() {
 }
 
 export async function updateMyProfile(payload: UpdateProfilePayload) {
-  const response = await api.patch<ApiResponse<MyProfile>>('/api/me', payload);
+  const formData = new FormData();
+
+  // API profile
+  Object.entries(payload).forEach(([key, value]) => {
+    if (value) {
+      formData.append(key, value);
+    }
+  });
+
+  const response = await api.patch<ApiResponse<MyProfile>>(
+    '/api/me',
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
 
   return response.data.data;
 }

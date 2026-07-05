@@ -23,4 +23,5 @@ export interface UpdateProfilePayload {
   phone?: string;
   bio?: string;
   avatarUrl?: string;
+  avatar?: File;
 }

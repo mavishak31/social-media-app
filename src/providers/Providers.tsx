@@ -13,8 +13,10 @@ function SessionHydrator({ children }: { children: React.ReactNode }) {
   // Ambil token supaya tetap login
   useEffect(() => {
     const token = localStorage.getItem('sociality_token');
+    const savedUser = localStorage.getItem('sociality_user');
+    const user = savedUser ? JSON.parse(savedUser) : null;
 
-    dispatch(hydrateSession({ token }));
+    dispatch(hydrateSession({ token, user }));
   }, [dispatch]);
 
   return children;

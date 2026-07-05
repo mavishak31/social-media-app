@@ -35,6 +35,7 @@ export function LoginForm() {
       const { token, user } = response.data;
 
       localStorage.setItem('sociality_token', token);
+      localStorage.setItem('sociality_user', JSON.stringify(user ?? null));
       dispatch(setSession({ token, user }));
       router.replace('/timeline');
     },
