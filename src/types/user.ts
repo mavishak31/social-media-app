@@ -4,6 +4,8 @@ export interface UserSummary {
   name: string;
   avatarUrl: string | null;
   isFollowedByMe?: boolean;
+  isMe?: boolean;
+  followsMe?: boolean;
 }
 
 export interface PublicUserProfile extends UserSummary {

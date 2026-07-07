@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { getPostDetail } from '@/api/posts';
+import { CommentsSection } from '@/components/comments/CommentsSection';
 import { PostDetail } from '@/components/posts/PostDetail';
 import { EmptyState } from '@/components/states/EmptyState';
 import { ErrorState } from '@/components/states/ErrorState';
@@ -31,6 +32,10 @@ export function PostDetailView() {
   return (
     <section className='space-y-4'>
       <PostDetail post={query.data} />
+      <CommentsSection
+        postId={query.data.id}
+        postAuthorUsername={query.data.author.username}
+      />
       {isOwner ? <DeletePostButton postId={query.data.id} /> : null}
     </section>
   );

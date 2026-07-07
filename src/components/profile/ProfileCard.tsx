@@ -1,37 +1,77 @@
+import { Send } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { DEFAULT_AVATAR } from '@/lib/images';
 import type { MyProfile } from '@/types/profile';
 
-const stats = ['posts', 'followers', 'following', 'likes', 'saved'] as const;
-
 export function ProfileCard({ profile }: { profile: MyProfile }) {
-  return (
-    <section className='rounded-lg border border-white/10 bg-zinc-950 p-5'>
-      <div className='flex flex-col gap-4 sm:flex-row sm:items-center'>
-        <Image
-          src={profile.avatarUrl || DEFAULT_AVATAR}
-          alt={profile.name}
-          width={72}
-          height={72}
-          className='size-[72px] rounded-full object-cover'
-        />
+  const stats = [
+    { label: 'Post', value: profile.stats?.posts ?? profile.counts?.post ?? 0 },
+    {
+      label: 'Followers',
+      value: profile.stats?.followers ?? profile.counts?.followers ?? 0,
+    },
+    {
+      label: 'Following',
+      value: profile.stats?.following ?? profile.counts?.following ?? 0,
+    },
+    {
+      label: 'Likes',
+      value: profile.stats?.likes ?? profile.counts?.likes ?? 0,
+    },
+  ];
 
-        <div>
-          <h1 className='text-2xl font-bold text-white'>{profile.name}</h1>
-          <p className='text-sm text-zinc-400'>@{profile.username}</p>
-          <p className='mt-2 text-sm text-zinc-300'>
-            {profile.bio || 'Belum ada bio.'}
-          </p>
+  return (
+    <section className='mx-auto max-w-3xl bg-black'>
+      <div className='flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between'>
+        <div className='flex items-center gap-4'>
+          <Image
+            src={profile.avatarUrl || DEFAULT_AVATAR}
+            alt={profile.name || 'Profile Avatar'}
+            width={72}
+            height={72}
+            className='size-[72px] rounded-full object-cover'
+          />
+
+          <div>
+            <h1 className='text-lg font-bold text-white'>
+              {profile.name || 'My Profile'}
+            </h1>
+            <p className='text-sm text-zinc-400'>
+              @{profile.username || 'username'}
+            </p>
+          </div>
+        </div>
+
+        <div className='flex items-center gap-3'>
+          <Link
+            href='/me/edit'
+            className='rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10'
+          >
+            Edit Profile
+          </Link>
+          <button
+            type='button'
+            className='flex size-10 items-center justify-center rounded-full border border-white/10 text-white'
+            aria-label='Share profile'
+          >
+            <Send className='size-4' />
+          </button>
         </div>
       </div>
 
-      <div className='mt-5 grid grid-cols-2 gap-3 sm:grid-cols-5'>
-        {stats.map((key) => (
-          <div key={key} className='rounded-md bg-white/5 p-3 text-center'>
-            <p className='text-lg font-bold text-white'>
-              {profile.stats?.[key] ?? 0}
-            </p>
-            <p className='text-xs capitalize text-zinc-500'>{key}</p>
+      <p className='mt-4 text-sm leading-6 text-zinc-300'>
+        {profile.bio || 'Belum ada bio.'}
+      </p>
+
+      <div className='mt-6 grid grid-cols-4'>
+        {stats.map((item, index) => (
+          <div
+            key={item.label}
+            className={`text-center ${index < stats.length - 1 ? 'border-r border-white/10' : ''}`}
+          >
+            <p className='text-lg font-bold text-white'>{item.value}</p>
+            <p className='text-xs text-zinc-500'>{item.label}</p>
           </div>
         ))}
       </div>

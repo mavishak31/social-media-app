@@ -1,5 +1,8 @@
+'use client';
+
 import Link from 'next/link';
-import { ExplorePosts } from '@/features/posts/ExplorePosts';
+import { getExplorePosts } from '@/api/posts';
+import { FeedList } from '@/features/posts/FeedList';
 
 export default function PostsPage() {
   return (
@@ -7,9 +10,7 @@ export default function PostsPage() {
       <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
         <div>
           <h1 className='text-3xl font-bold'>Explore Posts</h1>
-          <p className='text-sm text-zinc-400'>
-            Semua post dari API explore.
-          </p>
+          <p className='text-sm text-zinc-400'>Semua post dari API explore.</p>
         </div>
 
         <Link
@@ -20,7 +21,13 @@ export default function PostsPage() {
         </Link>
       </div>
 
-      <ExplorePosts />
+      <FeedList
+        queryKey='explore'
+        queryFn={getExplorePosts}
+        loadingText='Mengambil explore...'
+        errorText='Explore gagal dimuat.'
+        emptyText='Belum ada post.'
+      />
     </main>
   );
 }

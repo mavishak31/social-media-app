@@ -1,26 +1,70 @@
-import Link from 'next/link';
-import { TimelineFeed } from '@/features/posts/TimelineFeed';
+'use client';
+
+import { Compass, House } from 'lucide-react';
+import { useState } from 'react';
+
+import { getFeed } from '@/api/feed';
+import { getExplorePosts } from '@/api/posts';
+import { FeedList } from '@/features/posts/FeedList';
 
 export default function TimelinePage() {
-  return (
-    <main className='mx-auto max-w-5xl space-y-6 px-4 py-8'>
-      <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
-        <div>
-          <h1 className='text-3xl font-bold'>Timeline</h1>
-          <p className='text-sm text-zinc-400'>
-            Post dari akun kamu dan user yang kamu follow.
-          </p>
-        </div>
+  const [tab, setTab] = useState<'feed' | 'explore'>('feed');
 
-        <Link
-          href='/posts/create'
-          className='rounded-full bg-violet-600 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-violet-500'
-        >
-          Create Post
-        </Link>
+  return (
+    <main className='mx-auto max-w-6xl px-4 py-8'>
+      <div className='mb-10 flex items-center justify-center'>
+        <div className='flex rounded-full border border-white/10 bg-zinc-950 p-1'>
+          <button
+            onClick={() => setTab('feed')}
+            className={`flex items-center gap-2 rounded-full px-6 py-3 text-sm transition
+
+            ${
+              tab === 'feed'
+                ? 'bg-violet-600 text-white'
+                : 'text-zinc-400 hover:text-white'
+            }
+            `}
+          >
+            <House size={18} />
+            Feed
+          </button>
+
+          <button
+            onClick={() => setTab('explore')}
+            className={`flex items-center gap-2 rounded-full px-6 py-3 text-sm transition
+
+            ${
+              tab === 'explore'
+                ? 'bg-violet-600 text-white'
+                : 'text-zinc-400 hover:text-white'
+            }
+            `}
+          >
+            <Compass size={18} />
+            Explore
+          </button>
+        </div>
       </div>
 
-      <TimelineFeed />
+      <div className='mb-8' />
+
+      {tab === 'feed' ? (
+        <FeedList
+          queryKey='feed'
+          queryFn={getFeed}
+          loadingText='Mengambil timeline...'
+          errorText='Timeline gagal dimuat.'
+          emptyText='Timeline masih kosong.'
+        />
+      ) : (
+        <FeedList
+          queryKey='explore'
+          queryFn={getExplorePosts}
+          loadingText='Mengambil explore...'
+          errorText='Explore gagal dimuat.'
+          emptyText='Belum ada post.'
+        />
+      )}
     </main>
   );
 }

@@ -1,11 +1,19 @@
-import { Heart, MessageCircle } from 'lucide-react';
+'use client';
+
+import { MessageCircle, Send } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
+import { LikeButton } from '@/components/likes/LikeButton';
+import { LikesModal } from '@/components/likes/LikesModal';
+import { SaveButton } from '@/components/saves/SaveButton';
 import { dayjs } from '@/lib/dayjs';
 import { DEFAULT_AVATAR } from '@/lib/images';
 import type { Post } from '@/types/post';
 
 export function PostDetail({ post }: { post: Post }) {
+  const [likesOpen, setLikesOpen] = useState(false);
+
   return (
     <article className='overflow-hidden rounded-lg border border-white/10 bg-zinc-950'>
       <Image
@@ -39,17 +47,32 @@ export function PostDetail({ post }: { post: Post }) {
 
         {post.caption ? <p className='text-sm text-zinc-300'>{post.caption}</p> : null}
 
-        <div className='flex items-center gap-4 text-sm text-zinc-400'>
-          <span className='flex items-center gap-1'>
-            <Heart className='size-4' />
-            {post.likeCount} likes
-          </span>
-          <span className='flex items-center gap-1'>
-            <MessageCircle className='size-4' />
-            {post.commentCount} comments
-          </span>
+        <div className='flex items-center justify-between text-sm text-zinc-400'>
+          <div className='flex items-center gap-4'>
+            <LikeButton
+              postId={post.id}
+              initialLiked={post.likedByMe}
+              initialCount={post.likeCount}
+              onOpenLikes={() => setLikesOpen(true)}
+            />
+            <span className='flex items-center gap-1'>
+              <MessageCircle className='size-5' />
+              {post.commentCount}
+            </span>
+            <span className='flex items-center gap-1'>
+              <Send className='size-5' />
+              20
+            </span>
+          </div>
+
+          <SaveButton
+            postId={post.id}
+            initialSaved={post.savedByMe || post.isSavedByMe}
+          />
         </div>
       </div>
+
+      <LikesModal postId={post.id} open={likesOpen} onOpenChange={setLikesOpen} />
     </article>
   );
 }

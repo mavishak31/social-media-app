@@ -1,17 +1,27 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { Search } from 'lucide-react';
+import { LogOut, Search, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import { getMyProfile } from '@/api/profile';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { clearSession } from '@/store/auth-slice';
+import { useDispatch } from 'react-redux';
+import type { AppDispatch } from '@/store';
 import { APP_LOGO, DEFAULT_AVATAR } from '@/lib/images';
-import { LogoutButton } from '@/features/auth/LogoutButton';
 
 export function PrivateNavbar() {
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
   const [keyword, setKeyword] = useState('');
 
   const profileQuery = useQuery({
@@ -27,6 +37,13 @@ export function PrivateNavbar() {
     if (value) {
       router.push(`/users/search?q=${encodeURIComponent(value)}`);
     }
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('sociality_token');
+    localStorage.removeItem('sociality_user');
+    dispatch(clearSession());
+    router.replace('/login');
   }
 
   return (
@@ -49,14 +66,8 @@ export function PrivateNavbar() {
           </div>
         </form>
 
-        <div className='flex items-center gap-3'>
-          <Link href='/posts' className='hidden text-sm text-zinc-300 hover:text-white lg:block'>
-            Posts
-          </Link>
-          <Link href='/users/search' className='hidden text-sm text-zinc-300 hover:text-white lg:block'>
-            Users
-          </Link>
-          <Link href='/me' className='flex items-center gap-3'>
+        <DropdownMenu>
+          <DropdownMenuTrigger className='flex items-center gap-3 rounded-full px-2 py-1 outline-none hover:bg-white/5'>
             <Image
               src={profileQuery.data?.avatarUrl || DEFAULT_AVATAR}
               alt={profileQuery.data?.name || 'Profile'}
@@ -67,9 +78,21 @@ export function PrivateNavbar() {
             <span className='hidden font-semibold text-white sm:block'>
               {profileQuery.data?.name || 'My Profile'}
             </span>
-          </Link>
-          <LogoutButton />
-        </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end' className='w-44 border-white/10 bg-zinc-950 text-white'>
+            <DropdownMenuItem asChild className='cursor-pointer'>
+              <Link href='/me'>
+                <User className='mr-2 size-4' />
+                My Profile
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className='bg-white/10' />
+            <DropdownMenuItem onClick={handleLogout} className='cursor-pointer text-red-300'>
+              <LogOut className='mr-2 size-4' />
+              Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <form onSubmit={handleSearch} className='border-t border-white/10 px-5 py-3 md:hidden'>

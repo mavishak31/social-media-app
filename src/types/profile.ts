@@ -15,6 +15,13 @@ export interface MyProfile {
   bio?: string | null;
   avatarUrl?: string | null;
   stats?: ProfileStats;
+  counts?: {
+    post?: number;
+    followers?: number;
+    following?: number;
+    likes?: number;
+    saved?: number;
+  };
 }
 
 export interface UpdateProfilePayload {
