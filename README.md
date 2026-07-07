@@ -1,5 +1,16 @@
+Nama Lengkap
+Ishak Maventha Amrafel
+Email
+mav.ishak31@gmail.com
+Link Github Repository
+[\*](https://github.com/mavishak31/social-media-app)
+Link Deploy Project
+[\*](https://social-media-app-mavishak.vercel.app/)
+
+-
+
 search pake debounce
-timeline pake feed di API
+timeline get feed di API
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
